@@ -1,12 +1,27 @@
-from flask import json, Response
+from flask import jsonify, Response
 from . import api
+
+def validation(request):
+
+    return jsonify({
+
+        'status': 400,
+        'description': 'Invalid request\'s values',
+    }), 400
+
 
 def already_exists(description=''):
 
-    error = {
+    return jsonify({
+
         'status': 409,
         'description': description
-    }
-    js = json.dumps(error)
+    }), 409
 
-    return Response(js, status=409, mimetype='application/json')
+def not_authorized():
+
+    return jsonify({
+
+        'status': 401,
+        'description': 'Unauthorized'
+    })

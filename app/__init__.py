@@ -1,12 +1,16 @@
-from flask import Flask
+from flask import Flask, g
 from flask_sqlalchemy import SQLAlchemy
+from flask.ext.httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
+auth = HTTPBasicAuth()
 
 def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/pihome'
+    app.config['SECRET_KEY'] = 'PiHome_pawlus_secret_key'
+    app.config['DEBUG'] = True
 
     from .models.user import User
 

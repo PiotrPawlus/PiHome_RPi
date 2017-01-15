@@ -1,2 +1,4 @@
+flask
+flask_sqlalchemy
 flask-restful
-pbr
+flask-httpauth
