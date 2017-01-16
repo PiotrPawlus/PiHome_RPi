@@ -1,10 +1,9 @@
 from flask import jsonify, Response
 from . import api
 
-def validation(request):
+def validation():
 
     return jsonify({
-
         'status': 400,
         'description': 'Invalid request\'s values',
     }), 400
@@ -23,5 +22,13 @@ def not_authorized():
     return jsonify({
 
         'status': 401,
-        'description': 'Unauthorized'
+        'description': 'Not authorized.'
+    }), 401
+
+def not_active():
+
+    return jsonify({
+
+        'status': 401,
+        'description': 'Wait for acceptance.'
     })

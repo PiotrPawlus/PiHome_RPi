@@ -18,3 +18,5 @@ curl -H "Content-Type: application/json" -X POST -d '{"username":"a","password":
 
 POST - token:
 curl -u eyJhbGciOiJIUzI1NiIsImV4cCI6MTQ4NDU4NjI2OCwiaWF0IjoxNDg0NTg1NjY4fQ.eyJpZCI6MX0.bq_R3A3LoTxsKHn5HG34MBxS7p8Bph_AF09VRVjVtNA:none -i -X GET http://127.0.0.1:5000/api/v1/token
+
+curl -X GET http://127.0.0.1:5000/api/v1/

@@ -1,7 +1,7 @@
 from flask import jsonify, request, abort
 
 from . import api
-from .. import db, auth
+from .. import auth
 
 @api.route('/device/<int:id>', methods=['GET'])
 @auth.login_required

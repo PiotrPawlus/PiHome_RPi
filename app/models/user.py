@@ -1,6 +1,8 @@
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
-from .. import app, db, auth
+
+from . import db
+from .. import app, auth
 
 class User(db.Model):
 
@@ -8,32 +10,29 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    username = db.Column(db.String(255), nullable=False, unique=True)
+    email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
 
     access_token = db.Column(db.String(16), nullable=True)
-    is_enabled = db.Column(db.Boolean(), nullable=False, default=False)
+    is_authorized = db.Column(db.Boolean(), nullable=False, default=False)
 
-    def __init__(self, username, password, first_name, last_name, is_enabled):
+    def __init__(self, email, password, first_name, last_name, is_authorized):
 
-        self.username = username
+        self.email = email
         self.first_name = first_name
         self.last_name = last_name
-        self.is_enabled = is_enabled
+        self.is_authorized = is_authorized
 
-    def __init__(self, username, password, first_name, last_name):
+    def __init__(self, email, password, first_name, last_name):
 
-        self.username = username
+        self.email = email
         self.first_name = first_name
         self.last_name = last_name
 
     def __repr__(self):
-        return '<User %r>' % self.username
-
-    def is_active(self):
-      return self.is_enabled
+        return '<User %r>' % self.email
 
     def hash_password(self, password):
         self.password = pwd_context.encrypt(password)
