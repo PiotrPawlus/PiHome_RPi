@@ -6,8 +6,6 @@ from Error import already_exists, validation, not_authorized
 
 from ..models.device import Device, db
 
-
-
 @api.route('/device/<int:id>', methods=['DELETE', 'GET', 'UPDATE'])
 def get_device(id):
 
@@ -15,9 +13,29 @@ def get_device(id):
         abort(404)
 
     if request.method == 'DELETE':
-        print('DELETE')
+
+        device = Device.query.filter_by(id = id).first()
+
+        db.session.delete(device)
+        db.session.commit()
+
+        return jsonify({
+            'status': 200
+        }), 200
+        
     if request.method == 'GET':
-        print('GET')
+
+        device = Device.query.filter_by(id = id).first()
+
+        return jsonify({
+
+            'name': device.name,
+            'description': device.description,
+            'pin': device.pin,
+            'state': device.state,
+            'status': 201
+        }), 201
+
     if request.method == 'UPDATE':
         print('UPDATE')
 
