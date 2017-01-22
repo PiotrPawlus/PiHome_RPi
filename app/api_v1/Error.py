@@ -24,11 +24,3 @@ def not_authorized():
         'status': 401,
         'description': 'Not authorized.'
     }), 401
-
-def not_active():
-
-    return jsonify({
-
-        'status': 401,
-        'description': 'Wait for acceptance.'
-    })

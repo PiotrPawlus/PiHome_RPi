@@ -6,4 +6,4 @@ api = Blueprint('api_v1', __name__)
 #from . import dis_endpoint, dat_endpoint
 
 from . import authentication
-from . import device
+from . import devices
