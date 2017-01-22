@@ -33,8 +33,7 @@ def get_device(id):
             'name': device.name,
             'description': device.description,
             'pin': device.pin,
-            'state': device.state,
-            'status': 201
+            'state': device.state
         }), 201
 
     if request.method == 'POST':
@@ -58,8 +57,7 @@ def get_device(id):
             'name': device.name,
             'description': device.description,
             'pin': device.pin,
-            'state': device.state,
-            'status': 201
+            'state': device.state
         }), 201
 
 @api.route('/device', methods=['POST'])
@@ -88,14 +86,54 @@ def create_device():
         'name': device.name,
         'description': device.description,
         'pin': device.pin,
-        'state': device.state,
-        'status': 201
+        'state': device.state
     }), 201
 
-@api.route('/device/status/<int:id>', methods=['GET'])
-def get_device_status(id):
-    return "GET device status %i" % id
+@api.route('/device/<int:id>/state', methods=['GET', 'POST'])
+def get_device_state(id):
+
+    if not request.is_json:
+        abort(404)
+
+    device = Device.query.filter_by(id = id).first()
+
+    if request.method == 'GET':
+
+        return jsonify({
+
+            'state': device.state
+        }), 200
+
+    if request.method == 'POST':
+
+        device.state = not device.state
+        db.session.commit()
+
+        return jsonify({
+
+            'name': device.name,
+            'description': device.description,
+            'pin': device.pin,
+            'state': device.state
+        }), 201
 
 @api.route('/devices', methods=['GET'])
 def get_devices():
-    return "GET devices"
+
+    if not request.is_json:
+        abort(404)
+
+    devices = Device.query.all()
+
+    list = []
+    for device in devices:
+
+        list.append({
+
+            'name': device.name,
+            'description': device.description,
+            'pin': device.pin,
+            'state': device.state
+        })
+
+    return jsonify(list), 200

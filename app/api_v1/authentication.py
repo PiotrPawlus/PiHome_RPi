@@ -1,7 +1,7 @@
 from flask import jsonify, json, request, abort, Response
 
 from . import api
-from Error import already_exists, validation, not_authorized
+from Error import already_exists, validation, not_authorized, not_active
 from ..models.user import User, db
 from .. import auth, g
 
