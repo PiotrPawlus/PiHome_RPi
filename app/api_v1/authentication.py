@@ -50,8 +50,9 @@ def register():
         'authentication_token': '',
         'email': user.email,
         'first_name': user.first_name,
-        'last_name': user.last_name,
+        'id': user.id,
         'is_authorized': user.is_authorized,
+        'last_name': user.last_name,
         'status': 201
     }), 201
 
@@ -77,8 +78,9 @@ def create_session():
         'authentication_token': token,
         'email': g.user.email,
         'first_name': g.user.first_name,
-        'last_name': g.user.last_name,
+        'id': g.user.id
         'is_authorized': g.user.is_authorized,
+        'last_name': g.user.last_name,
         'status': 200
     }), 200
 

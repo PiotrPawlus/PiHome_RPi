@@ -33,6 +33,7 @@ def get_device(id):
 
             'name': device.name,
             'description': device.description,
+            'id': device.id,
             'pin': device.pin,
             'state': device.state
         }), 201
@@ -57,6 +58,7 @@ def get_device(id):
 
             'name': device.name,
             'description': device.description,
+            'id': device.id,
             'pin': device.pin,
             'state': device.state
         }), 201
@@ -87,6 +89,7 @@ def create_device():
 
         'name': device.name,
         'description': device.description,
+        'id': device.id,
         'pin': device.pin,
         'state': device.state
     }), 201
@@ -116,6 +119,7 @@ def get_device_state(id):
 
             'name': device.name,
             'description': device.description,
+            'id', device.id
             'pin': device.pin,
             'state': device.state
         }), 201
@@ -136,6 +140,7 @@ def get_devices():
 
             'name': device.name,
             'description': device.description,
+            'id', device.id,
             'pin': device.pin,
             'state': device.state
         })
