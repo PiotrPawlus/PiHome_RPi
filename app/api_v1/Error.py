@@ -1,33 +1,48 @@
-from flask import jsonify, Response
-from . import api
+from flask import jsonify, Response, request
+from .. import app
 
-def validation():
+@app.errorhandler(400)
+def validation(error=None):
 
     return jsonify({
         'status': 400,
-        'description': 'Invalid request\'s values',
+        'description': error.description,
+        'address': request.url
     }), 400
 
-
-def already_exists(description=''):
+@app.errorhandler(409)
+def already_exists(error=None):
 
     return jsonify({
 
         'status': 409,
-        'description': description
+        'description': error.description,
+        'address': request.url
     }), 409
 
-def not_authorized():
+@app.errorhandler(401)
+def not_authorized(error=None):
 
     return jsonify({
-
         'status': 401,
-        'description': 'Not authorized.'
+        'description': error.description,
+        'address': request.url
     }), 401
 
-def not_active():
+@app.errorhandler(403)
+def not_active(error=None):
 
     return jsonify({
-
-        'description': 'User is not active.'
+        'status': 403,
+        'description': 'User not active. Please conntact with administrator.',
+        'address': request.url
     }), 403
+
+@app.errorhandler(404)
+def not_found(error=None):
+
+    return jsonify({
+        'status': 404,
+        'description': error.description,
+        'address': request.url
+    }), 404

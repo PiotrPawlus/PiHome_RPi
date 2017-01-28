@@ -1,4 +1,5 @@
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Response
+import json
 
 from . import api
 from .. import auth
@@ -9,9 +10,6 @@ from ..models.device import Device, db
 @api.route('/device/<int:id>', methods=['DELETE', 'GET', 'POST'])
 @auth.login_required
 def get_device(id):
-
-    if not request.is_json:
-        abort(404)
 
     device = Device.query.filter_by(id = id).first()
 
@@ -67,9 +65,6 @@ def get_device(id):
 @auth.login_required
 def create_device():
 
-    if not request.is_json:
-        abort(404)
-
     name = request.json.get('name')
     description = request.json.get('description')
     pin = request.json.get('pin')
@@ -98,9 +93,6 @@ def create_device():
 @auth.login_required
 def get_device_state(id):
 
-    if not request.is_json:
-        abort(404)
-
     device = Device.query.filter_by(id = id).first()
 
     if request.method == 'GET':
@@ -119,7 +111,7 @@ def get_device_state(id):
 
             'name': device.name,
             'description': device.description,
-            'id', device.id
+            'id': device.id,
             'pin': device.pin,
             'state': device.state
         }), 201
@@ -128,21 +120,19 @@ def get_device_state(id):
 @auth.login_required
 def get_devices():
 
-    if not request.is_json:
-        abort(404)
-
     devices = Device.query.all()
 
-    list = []
+    devices_list = []
     for device in devices:
 
-        list.append({
+        devices_list.append({
 
             'name': device.name,
             'description': device.description,
-            'id', device.id,
+            'id': device.id,
             'pin': device.pin,
             'state': device.state
         })
 
-    return jsonify(list), 200
+    devices = {'devices': devices_list}
+    return Response(json.dumps(devices), mimetype='application/json')

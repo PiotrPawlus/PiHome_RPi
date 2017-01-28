@@ -1,7 +1,6 @@
 from flask import jsonify, json, request, abort, Response
 
 from . import api
-from Error import already_exists, validation, not_authorized, not_active
 from ..models.user import User, db
 from .. import auth, g
 
@@ -33,12 +32,15 @@ def register():
     last_name = request.json.get('last_name')
 
     if email is None or password is None or first_name is None or last_name is None:
-        return validation(request)
+        return abort(404, 'Missing argumets in request for ' + request.url)
+
+    if not email or not password or not first_name or not last_name:
+        return abort(400, 'Email, password, first name or last name is empty.')
 
     user = User(email, password, first_name, last_name)
 
     if db.session.query(db.exists().where(User.email == user.email)).scalar():
-        return already_exists('The email already registered.')
+        return abort(409, 'The email already registered.')
 
     user.hash_password(password)
 
@@ -63,13 +65,13 @@ def create_session():
     password = request.json.get('password')
 
     if email is None or password is None:
-        return validation()
+        return abort(404, 'Missing argumets in request for ' + request.url)
 
     if not verify_password(email, password):
-        return not_authorized
+        return abort(401, 'Wrong email or password.')
 
     if not g.user.is_authorized:
-        return not_active()
+        return abort(403)
 
     token = g.user.generate_auth_token()
 
@@ -78,7 +80,7 @@ def create_session():
         'authentication_token': token,
         'email': g.user.email,
         'first_name': g.user.first_name,
-        'id': g.user.id
+        'id': g.user.id,
         'is_authorized': g.user.is_authorized,
         'last_name': g.user.last_name,
         'status': 200
