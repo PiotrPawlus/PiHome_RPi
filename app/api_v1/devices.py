@@ -7,6 +7,7 @@ from Error import already_exists, validation, not_authorized
 from ..models.device import Device, db
 
 @api.route('/device/<int:id>', methods=['DELETE', 'GET', 'POST'])
+@auth.login_required
 def get_device(id):
 
     if not request.is_json:
@@ -61,6 +62,7 @@ def get_device(id):
         }), 201
 
 @api.route('/device', methods=['POST'])
+@auth.login_required
 def create_device():
 
     if not request.is_json:
@@ -90,6 +92,7 @@ def create_device():
     }), 201
 
 @api.route('/device/<int:id>/state', methods=['GET', 'POST'])
+@auth.login_required
 def get_device_state(id):
 
     if not request.is_json:
@@ -118,6 +121,7 @@ def get_device_state(id):
         }), 201
 
 @api.route('/devices', methods=['GET'])
+@auth.login_required
 def get_devices():
 
     if not request.is_json:

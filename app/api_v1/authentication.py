@@ -27,9 +27,6 @@ def connect():
 @api.route('/registration', methods=['POST'])
 def register():
 
-    if not request.is_json:
-        abort(404)
-
     email = request.json.get('email')
     password = request.json.get('password')
     first_name = request.json.get('first_name')
@@ -60,9 +57,6 @@ def register():
 
 @api.route('/authentication', methods=['POST'])
 def create_session():
-
-    if not request.is_json:
-        abort(404)
 
     email = request.json.get('email')
     password = request.json.get('password')
