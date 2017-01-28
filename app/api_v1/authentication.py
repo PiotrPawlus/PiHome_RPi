@@ -17,7 +17,7 @@ def verify_password(email_or_token, password):
     g.user = user
     return True
 
-@api.route('/baseurl', methods=['GET'])
+@api.route('/', methods=['GET'])
 def connect():
 
     return jsonify({
