@@ -35,7 +35,7 @@ def register():
         return abort(404, 'Missing argumets in request for ' + request.url)
 
     if not email or not password or not first_name or not last_name:
-        return abort(400, 'Email, password, first name or last name is empty.')
+        return abort(400, 'Email, password, first name and last name cannot be empty.')
 
     user = User(email, password, first_name, last_name)
 

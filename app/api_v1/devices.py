@@ -1,20 +1,31 @@
-from flask import jsonify, request, abort, Response
-import json
+from flask import jsonify, json, request, abort, Response
 
 from . import api
-from .. import auth
-from Error import already_exists, validation, not_authorized
-
 from ..models.device import Device, db
+from .. import auth, g
 
-@api.route('/device/<int:id>', methods=['DELETE', 'GET', 'POST'])
+@api.route('/device/<int:id>', methods=['DELETE', 'GET'])
 @auth.login_required
-def get_device(id):
+def get_update_delete_device(id):
 
     device = Device.query.filter_by(id = id).first()
 
     if not device:
-        abort(400)
+        return abort(400, 'Device not found.')
+
+    if request.method == 'GET':
+
+        return jsonify({
+
+            'name': device.name,
+            'description': device.description,
+            'id': device.id,
+            'pin': device.pin,
+            'state': device.state
+        }), 200
+
+    if not g.user.administrator:
+        return abort(400, 'Device not found.')
 
     if request.method == 'DELETE':
 
@@ -25,31 +36,28 @@ def get_device(id):
             'status': 200
         }), 200
 
-    if request.method == 'GET':
+@api.route('/device', methods=['POST'])
+@auth.login_required
+def create_device():
 
-        return jsonify({
-
-            'name': device.name,
-            'description': device.description,
-            'id': device.id,
-            'pin': device.pin,
-            'state': device.state
-        }), 201
-
-    if request.method == 'POST':
+    if g.user.administrator:
 
         name = request.json.get('name')
         description = request.json.get('description')
         pin = request.json.get('pin')
 
         if name is None or description is None or pin is None:
-            return validation
+            return abort(404, 'Missing argumets in request for ' + request.url)
 
-        device.name = name
-        device.description = description
-        device.pin = pin
-        device.state = False
+        if not name or not pin:
+            return abort(400, 'Name and pin cannot be empty.')
 
+        device = Device(name, description, pin)
+
+        if db.session.query(db.exists().where(Device.pin == device.pin)).scalar():
+            return abort(409, 'The device already added to system.')
+
+        db.session.add(device)
         db.session.commit()
 
         return jsonify({
@@ -61,44 +69,25 @@ def get_device(id):
             'state': device.state
         }), 201
 
-@api.route('/device', methods=['POST'])
-@auth.login_required
-def create_device():
-
-    name = request.json.get('name')
-    description = request.json.get('description')
-    pin = request.json.get('pin')
-
-    if name is None or description is None or pin is None:
-        return validation
-
-    device = Device(name, description, pin)
-
-    if db.session.query(db.exists().where(Device.pin == device.pin)).scalar():
-        return already_exists('The device already registered.')
-
-    db.session.add(device)
-    db.session.commit()
-
-    return jsonify({
-
-        'name': device.name,
-        'description': device.description,
-        'id': device.id,
-        'pin': device.pin,
-        'state': device.state
-    }), 201
+    return abort(404, 'Not found: ' + request.url)
 
 @api.route('/device/<int:id>/state', methods=['GET', 'POST'])
 @auth.login_required
-def get_device_state(id):
+def get_set_device_state(id):
 
     device = Device.query.filter_by(id = id).first()
+
+    if not device:
+        abort(400, 'Device not found.')
 
     if request.method == 'GET':
 
         return jsonify({
 
+            'name': device.name,
+            'description': device.description,
+            'id': device.id,
+            'pin': device.pin,
             'state': device.state
         }), 200
 

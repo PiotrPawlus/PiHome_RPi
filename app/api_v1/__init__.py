@@ -7,3 +7,4 @@ api = Blueprint('api_v1', __name__)
 
 from . import authentication
 from . import devices
+from . import error_handler
