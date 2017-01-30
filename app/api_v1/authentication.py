@@ -149,3 +149,32 @@ def authorized_user(id):
         'last_name': user.last_name,
         'super_user': user.administrator
     }), 201
+
+@api.route('/users/<int:id>/administration', methods=['POST'])
+@auth.login_required
+def set_administration_privilege(id):
+
+    if not g.user.administrator:
+        return abort(404, 'Not found: ' + request.url)
+
+    user = User.query.filter_by(id = id).first()
+
+    if not user:
+        abort(400, 'User not found.')
+
+    if g.user.id == user.id:
+        abort(409, 'Cannot update yourself.')
+
+    user.is_authorized = True
+    user.administrator = not user.administrator
+    db.session.commit()
+
+    return jsonify({
+
+        'email': user.email,
+        'first_name': user.first_name,
+        'id': user.id,
+        'is_authorized': user.is_authorized,
+        'last_name': user.last_name,
+        'super_user': user.administrator
+    }), 201
