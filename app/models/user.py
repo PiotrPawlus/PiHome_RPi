@@ -15,14 +15,15 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
 
-    access_token = db.Column(db.String(16), nullable=True)
+    administrator = db.Column(db.Boolean, nullable=False, default=False)
     is_authorized = db.Column(db.Boolean(), nullable=False, default=False)
 
-    def __init__(self, email, password, first_name, last_name, is_authorized):
+    def __init__(self, email, password, first_name, last_name, is_authorized, administrator):
 
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
+        self.administrator = administrator
         self.is_authorized = is_authorized
 
     def __init__(self, email, password, first_name, last_name):

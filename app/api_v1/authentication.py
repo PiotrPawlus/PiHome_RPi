@@ -59,7 +59,7 @@ def register():
     }), 201
 
 @api.route('/authentication', methods=['POST'])
-def create_session():
+def authentication():
 
     email = request.json.get('email')
     password = request.json.get('password')
@@ -75,7 +75,7 @@ def create_session():
 
     token = g.user.generate_auth_token()
 
-    return jsonify({
+    message = {
 
         'authentication_token': token,
         'email': g.user.email,
@@ -84,7 +84,12 @@ def create_session():
         'is_authorized': g.user.is_authorized,
         'last_name': g.user.last_name,
         'status': 200
-    }), 200
+    }
+
+    if g.user.administrator:
+        message['super_user'] = g.user.administrator
+
+    return jsonify(message), 200
 
 @api.route('/token')
 @auth.login_required
