@@ -96,3 +96,28 @@ def authentication():
 def get_auth_token():
     token = g.user.generate_auth_token()
     return jsonify({ 'token': token.decode('ascii') })
+
+@api.route('/users', methods=['GET'])
+@auth.login_required
+def get_users():
+
+    if not g.user.administrator:
+        return abort(404, 'Not found: ' + request.url)
+
+    users = User.query.all()
+
+    users_list = []
+    for user in users:
+
+        users_list.append({
+
+            'email': user.email,
+            'first_name': user.first_name,
+            'id': user.id,
+            'is_authorized': user.is_authorized,
+            'last_name': user.last_name,
+            'super_user': user.administrator
+        })
+
+    users = {'users': users_list}
+    return Response(json.dumps(users), mimetype='application/json')
