@@ -54,8 +54,8 @@ def create_device():
 
         device = Device(name, description, pin)
 
-        if db.session.query(db.exists().where(Device.pin == device.pin)).scalar():
-            return abort(409, 'The device already added to system.')
+        # if db.session.query(db.exists().where(Device.pin == device.pin)).scalar():
+        #     return abort(409, 'The device already added to system.')
 
         db.session.add(device)
         db.session.commit()
