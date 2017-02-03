@@ -6,7 +6,7 @@ class Device(db.Model):
 
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255))
-    pin = db.Column(db.String(10), nullable=False, unique=True)
+    pin = db.Column(db.Integer, nullable=False, unique=True)
 
     state = db.Column(db.Boolean(), nullable=False, default=False)
 
