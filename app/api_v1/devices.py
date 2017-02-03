@@ -52,11 +52,13 @@ def create_device():
         if not name or not pin:
             return abort(400, 'Name and pin cannot be empty.')
 
+        device = Device.query.filter_by(pin = pin).first()
+
+        if device:
+            return abort(409, 'The device already added to system.')
+
         device = Device(name, description, pin)
-
-        # if db.session.query(db.exists().where(Device.pin == device.pin)).scalar():
-        #     return abort(409, 'The device already added to system.')
-
+        
         db.session.add(device)
         db.session.commit()
 
