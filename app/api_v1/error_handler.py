@@ -20,26 +20,6 @@ def validation(error=None):
         'address': request.url
     }), 400
 
-@api.errorhandler(409)
-def api_already_exists(error=None):
-
-    return jsonify({
-
-        'status': 409,
-        'description': error.description,
-        'address': request.url
-    }), 409
-
-@app.errorhandler(409)
-def already_exists(error=None):
-
-    return jsonify({
-
-        'status': 409,
-        'description': error.description,
-        'address': request.url
-    }), 409
-
 @api.errorhandler(401)
 def api_not_authorized(error=None):
 
@@ -93,3 +73,43 @@ def not_found(error=None):
         'description': error.description,
         'address': request.url
     }), 404
+
+@api.errorhandler(409)
+def api_already_exists(error=None):
+
+    return jsonify({
+
+        'status': 409,
+        'description': error.description,
+        'address': request.url
+    }), 409
+
+@app.errorhandler(409)
+def already_exists(error=None):
+
+    return jsonify({
+
+        'status': 409,
+        'description': error.description,
+        'address': request.url
+    }), 409
+
+@api.errorhandler(501)
+def api_not_implemented(error=None):
+
+    return jsonify({
+
+        'status': 501,
+        'description': "Method not implemented",
+        'address': request.url
+    }), 501
+
+@app.errorhandler(501)
+def not_implemented(error=None):
+
+    return jsonify({
+
+        'status': 501,
+        'description': "Method not implemented",
+        'address': request.url
+    }), 501

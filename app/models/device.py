@@ -8,17 +8,12 @@ class Device(db.Model):
     description = db.Column(db.String(255))
     pin = db.Column(db.Integer, nullable=False, unique=True)
 
-    state = db.Column(db.Boolean(), nullable=False, default=False)
+    device_type = db.Column(db.String(20), nullable=False, default='switch')
 
-    def __init__(self, name, description, pin, state):
-
-        self.name = name
-        self.description = description
-        self.pin = pin
-        self.state = state
-
-    def __init__(self, name, description, pin):
+    def __init__(self, name, description, pin, device_type):
 
         self.name = name
         self.description = description
         self.pin = pin
+        self.device_type = device_type
+        
