@@ -1,22 +1,35 @@
-GET device - curl http://127.0.0.1:5000/api/v1/device/1      -- get information about device
-POST device - curl -X POST http://127.0.0.1:5000/api/v1/device   -- create new device
-PUT device - curl -X PUT http://127.0.0.1:5000/api/v1/device/1   -- update device
-DELETE device - curl -X DELETE http://127.0.0.1:5000/api/v1/device/1  -- delete device
-GET devices - curl http://127.0.0.1:5000/api/v1/devices - get list of devices
-GET device status - curl http://127.0.0.1:5000/api/v1/device/status/1 - get current device status
+# Apikacja na platformę Raspberry Pi
 
-POST session - curl -X POST http://127.0.0.1:5000/api/v1/session - login user
-DELETE session - curl -X DELETE http://127.0.0.1:5000/api/v1/session - logout user
+**Aplikacja mobilna na platformę iOS do obsługi systemu inteligentnego domu zbudowanego na platformie Raspberry Pi**
+**(ang. Smart home mobile application for iOS based devices, with support for Raspberry Pi devices)**
 
+**Politechnika Krakowska im. Tadeusza Kościuszki**
+**Wydział Inżynierii Elektrycznej i Komputerowej Politechniki Krakowskiej**
 
+Wykonał: **Piotr Pawluś**
 
-POST - create user:
-curl -H "Content-Type: application/json" -X POST -d '{"username":"a","password":"xyz", "first_name":"f", "last_name":"l"}' http://localhost:5000/api/v1/registration
+Promotor: **Dr Damian Grela**
 
-POST - login:
-curl -H "Content-Type: application/json" -X POST -d '{"username":"a","password":"xyz"}' http://localhost:5000/api/v1/authentication
+Projekt wykonany przez w ramach pracy inżynieryjskiej.
 
-POST - token:
-curl -u eyJhbGciOiJIUzI1NiIsImV4cCI6MTQ4NDU4NjI2OCwiaWF0IjoxNDg0NTg1NjY4fQ.eyJpZCI6MX0.bq_R3A3LoTxsKHn5HG34MBxS7p8Bph_AF09VRVjVtNA:none -i -X GET http://127.0.0.1:5000/api/v1/token
+* **Główne założenia**:
+  - Podział użytkowników na administrację systemu oraz na użytkoników.
+  - Możliwość samodzielnej rejestracji użytkownika w systemie.
+  - Akceptacja rejestracji nowych użytkowników przez administratora systemu.
+  - Autentykacja użytkownika w aplikacji.
+  - Możliwość dodowania przez administratora systemu dwóch typów urządzeń (zasada działania przełącznika i zazada działania przycisku).
+  - Możliwość usuwania urządzeń przez administratora.
+  - Możliwość zmiany stanu urządzeń przez oba typy użytkowników.
+  - Możliwość otrzymania listy wszystkich urządzeń dla obu typów użytkowników.
+  - Możliwość otrzymania listy wszystkich użytkowników przez administratora systemu.
+  - Możliwość nadawania praw do autentykacji w systemie oraz praw administracyjnych przez administratora systemu.
 
-curl -X GET http://127.0.0.1:5000/api/v1/
+* **Wykorzystane narzędzia**:
+  - Urządzenie fizyczne - Raspberry Pi wersja 3B
+  - Język programowania - Python 2.7
+  - System relacyjnej bazy danych - PostgreSQL
+  - Biblioteka do tworzenia serwera REST - Flask
+  - System - Raspbian GNU/Linux 8.0 (jessie)
+  - Dodatkowe biblioteki - flask, flask_sqlalchemy, flask-restful, flask-httpauth, GPIO, time
+
+Cześć [mobilna na platformę iOS](https://github.com/PiotrPawlus/PiHome_iOS)
