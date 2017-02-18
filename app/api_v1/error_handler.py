@@ -43,7 +43,7 @@ def api_not_active(error=None):
 
     return jsonify({
         'status': 403,
-        'description': 'User not active. Please conntact with administrator.',
+        'description': 'user_not_active',
         'address': request.url
     }), 403
 
@@ -52,7 +52,7 @@ def not_active(error=None):
 
     return jsonify({
         'status': 403,
-        'description': 'User not active. Please conntact with administrator.',
+        'description': 'user_not_active',
         'address': request.url
     }), 403
 
@@ -100,7 +100,7 @@ def api_not_implemented(error=None):
     return jsonify({
 
         'status': 501,
-        'description': "Method not implemented",
+        'description': 'not_implemented',
         'address': request.url
     }), 501
 
@@ -110,6 +110,6 @@ def not_implemented(error=None):
     return jsonify({
 
         'status': 501,
-        'description': "Method not implemented",
+        'description': 'not_implemented',
         'address': request.url
     }), 501

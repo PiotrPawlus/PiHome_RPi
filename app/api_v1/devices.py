@@ -25,14 +25,14 @@ def get_delete_device(id):
     device = Device.query.filter_by(id = id).first()
 
     if not device:
-        return abort(400, 'Device not found.')
+        return abort(400, 'device_not_found')
 
     state = -1
 
     try:
         state = device_state(device.pin)
     except:
-        return abort(400, 'Device is not connected.')
+        return abort(400, 'device_not_connected')
 
     if request.method == 'GET':
 
@@ -47,7 +47,7 @@ def get_delete_device(id):
         }), 200
 
     if not g.user.administrator:
-        return abort(400, 'Device not found.')
+        return abort(400, 'device_not_found')
 
     if request.method == 'DELETE':
 
@@ -56,7 +56,7 @@ def get_delete_device(id):
         try:
             state = device_state(device.pin)
         except:
-            return abort(400, 'Device is not connected.')
+            return abort(400, 'device_not_connected')
 
         if state == 0 and device.device_type == 'button':
             GPIO.output(int(device.pin), GPIO.HIGH)
@@ -85,15 +85,15 @@ def create_device():
         pin = request.json.get('pin')
 
         if name is None or description is None or pin is None or device_type is None:
-            return abort(404, 'Missing argumets in request for ' + request.url)
+            return abort(404, 'missing_argumets')
 
         if not name or not pin:
-            return abort(400, 'Name and pin cannot be empty.')
+            return abort(400, 'empty_parameters')
 
         device = Device.query.filter_by(pin = pin).first()
 
         if device:
-            return abort(409, 'The device already added to system.')
+            return abort(409, 'already_added')
 
         device = Device(name, description, pin, device_type)
 
@@ -110,7 +110,7 @@ def create_device():
         try:
             state = device_state(device.pin)
         except:
-            return abort(400, 'Device is not connected.')
+            return abort(400, 'device_not_connected')
 
         db.session.add(device)
         db.session.commit()
@@ -134,7 +134,7 @@ def get_set_device_state(id):
     device = Device.query.filter_by(id = id).first()
 
     if not device:
-        abort(400, 'Device not found.')
+        abort(400, 'device_not_found')
 
     if request.method == 'GET':
 
@@ -143,7 +143,7 @@ def get_set_device_state(id):
         try:
             state = device_state(device.pin)
         except:
-            return abort(400, 'Device is not connected.')
+            return abort(400, 'device_not_connected')
 
         return jsonify({
 
@@ -164,7 +164,7 @@ def get_set_device_state(id):
             try:
                 state = device_state(device.pin)
             except:
-                return abort(400, 'Device is not connected.')
+                return abort(400, 'device_not_connected')
 
             if state == 1:
                 GPIO.output(int(device.pin), GPIO.LOW)
@@ -174,7 +174,7 @@ def get_set_device_state(id):
             try:
                 state = device_state(device.pin)
             except:
-                return abort(400, 'Device is not connected.')
+                return abort(400, 'device_not_connected')
 
             return jsonify({
 
@@ -218,7 +218,7 @@ def get_devices():
         try:
             state = device_state(device.pin)
         except:
-            return abort(400, 'Device is not connected.')
+            return abort(400, 'device_not_connected')
 
         devices_list.append({
 

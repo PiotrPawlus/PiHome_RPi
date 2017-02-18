@@ -32,15 +32,15 @@ def register():
     last_name = request.json.get('last_name')
 
     if email is None or password is None or first_name is None or last_name is None:
-        return abort(404, 'Missing argumets in request for ' + request.url)
+        return abort(404, 'missing_argumets')
 
     if not email or not password or not first_name or not last_name:
-        return abort(400, 'Email, password, first name and last name cannot be empty.')
+        return abort(400, 'empty_parameters')
 
     user = User(email, password, first_name, last_name)
 
     if db.session.query(db.exists().where(User.email == user.email)).scalar():
-        return abort(409, 'The email already registered.')
+        return abort(409, 'email_already_registered.')
 
     user.hash_password(password)
 
@@ -65,10 +65,10 @@ def authentication():
     password = request.json.get('password')
 
     if email is None or password is None:
-        return abort(404, 'Missing argumets in request for ' + request.url)
+        return abort(404, 'missing_argumets')
 
     if not verify_password(email, password):
-        return abort(401, 'Wrong email or password.')
+        return abort(401, 'wrong_email_or_password')
 
     if not g.user.is_authorized:
         return abort(403)
@@ -102,7 +102,7 @@ def get_auth_token():
 def get_users():
 
     if not g.user.administrator:
-        return abort(404, 'Not found: ' + request.url)
+        return abort(404, 'not_found')
 
     users = User.query.all()
 
@@ -127,15 +127,15 @@ def get_users():
 def authorized_user(id):
 
     if not g.user.administrator:
-        return abort(404, 'Not found: ' + request.url)
+        return abort(404, 'not_found')
 
     user = User.query.filter_by(id = id).first()
 
     if not user:
-        abort(400, 'User not found.')
+        abort(400, 'user_not_found')
 
     if g.user.id == user.id:
-        abort(409, 'Cannot update yourself.')
+        abort(409, 'cannot_update_yourself')
 
     user.is_authorized = not user.is_authorized
     db.session.commit()
@@ -155,15 +155,15 @@ def authorized_user(id):
 def set_administration_privilege(id):
 
     if not g.user.administrator:
-        return abort(404, 'Not found: ' + request.url)
+        return abort(404, 'not_found')
 
     user = User.query.filter_by(id = id).first()
 
     if not user:
-        abort(400, 'User not found.')
+        abort(400, 'user_not_found')
 
     if g.user.id == user.id:
-        abort(409, 'Cannot update yourself.')
+        abort(409, 'cannot_update_yourself')
 
     user.is_authorized = True
     user.administrator = not user.administrator
